@@ -1,0 +1,175 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Birthday Treasure Hunt 🎉</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #333;
+    }
+    .container {
+      background: #fff;
+      width: 90%;
+      max-width: 600px;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+    h1 {
+      color: #ff5e78;
+      margin-bottom: 10px;
+    }
+    .clue {
+      font-size: 1.1rem;
+      margin: 20px 0;
+    }
+    input {
+      padding: 10px;
+      width: 80%;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 12px;
+      background: #ff5e78;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #e94b64;
+    }
+    .hint {
+      font-size: 0.9rem;
+      color: #888;
+      margin-top: 10px;
+    }
+    .hidden {
+      display: none;
+    }
+    video {
+      width: 100%;
+      border-radius: 15px;
+      margin-top: 20px;
+    }
+  canvas{position:fixed;top:0;left:0;pointer-events:none;}
+.lock{font-size:4rem;animation:shake 1s infinite;margin-bottom:15px;}@keyframes shake{0%{transform:rotate(0);}25%{transform:rotate(5deg);}50%{transform:rotate(-5deg);}75%{transform:rotate(5deg);}100%{transform:rotate(0);}}.handwritten{font-family:'Comic Sans MS',cursive;font-size:1.1rem;line-height:1.6;background:#fff7f0;padding:20px;border-radius:15px;margin-bottom:20px;}
+</style>
+</head>
+<body>
+<audio id="bgMusic" loop>
+  <source src="birthday-music.mp3" type="audio/mpeg">
+</audio><div class="container">
+  <h1>🎂 Birthday Treasure Hunt 🎂</h1>
+  <p>Crack the clues to unlock your surprise!</p>  <!-- STEP 1 -->  <div id="step1">
+    <div class="clue">Clue 1 💡<br> I erase mistakes but never remember them. What am I?</div>
+    <input type="text" id="answer1" placeholder="Your answer..." />
+    <br />
+    <button onclick="checkStep1()">Submit</button>
+    <div class="hint">Hint: Stationery item 😉</div>
+  </div>  <!-- STEP 2 -->  <div id="step2" class="hidden">
+    <div class="clue">Clue 2 🔍<br> We fight, we laugh, we never break. What are we?</div>
+    <input type="text" id="answer2" placeholder="Your answer..." />
+    <br />
+    <button onclick="checkStep2()">Submit</button>
+    <div class="hint">Hint: Friendship goals 💕</div>
+  </div>  <!-- STEP 3 -->  <div id="step3" class="hidden">
+    <div class="lock" id="lock">🔒</div>
+    <div class="clue">Final Clue 🗝️<br> Type the birthday person's nickname ❤️</div>
+    <input type="text" id="answer3" placeholder="Nickname..." />
+    <br />
+    <button onclick="checkStep3()">Unlock Surprise</button>
+  </div>  <!-- VIDEO REVEAL -->  <div id="reveal" class="hidden">
+    <div class="handwritten">Dear Palak,<br><br>
+    From sharing tiffins in 4th standard to surviving college life together…<br>
+    We’ve grown, changed, laughed, fought, and still stayed inseparable 💕<br><br>
+    <strong>11 beautiful years</strong> of friendship and counting ♾️<br>
+    Thank you for being my safe place, my chaos partner, and my forever best friend 🫶🏻<br><br>
+    Love you always ❤️</div>
+    <h2>🎉 Surprise, <span id="birthdayName">Bestie</span>! 🎉</h2>
+    <p>This is just for you, <strong>Alpika</strong> 💖<br>From your forever partner in crime 💕</p>
+    <img src="photo.jpg" alt="Memories" style="width:100%;border-radius:15px;margin-top:15px;" />
+    <video controls>
+      <!-- Replace this with your birthday video link -->
+      <source src="birthday-video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</div><canvas id="confetti"></canvas>
+
+<script>
+  function checkStep1() {
+    const a1 = document.getElementById('answer1').value.toLowerCase();
+    if (a1.includes('eraser')) {
+      document.getElementById('step1').classList.add('hidden');
+      document.getElementById('step2').classList.remove('hidden');
+    } else {
+      alert('Oops! Try again 😜');
+    }
+  }
+
+  function checkStep2() {
+    const a2 = document.getElementById('answer2').value.toLowerCase();
+    if (a2.includes('best friend') || a2.includes('friends')) {
+      document.getElementById('step2').classList.add('hidden');
+      document.getElementById('step3').classList.remove('hidden');
+    } else {
+      alert('Not quite! Think emotional 💗');
+    }
+  }
+
+  function checkStep3() {
+    const a3 = document.getElementById('answer3').value.toLowerCase();
+    if (a3.length > 1) {
+      document.getElementById('step3').classList.add('hidden');
+      document.getElementById('reveal').classList.remove('hidden');
+      startConfetti(); document.getElementById('bgMusic').play(); document.getElementById('lock')?.remove();
+    } else {
+      alert('Enter the nickname 😉');
+    }
+  }
+  const canvas = document.getElementById('confetti');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let confettiPieces = [];
+  function startConfetti() {
+    for (let i = 0; i < 200; i++) {
+      confettiPieces.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        r: Math.random() * 6 + 4,
+        d: Math.random() * 200,
+        color: `hsl(${Math.random() * 360}, 100%, 60%)`
+      });
+    }
+    requestAnimationFrame(drawConfetti);
+  }
+
+  function drawConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    confettiPieces.forEach(p => {
+      ctx.beginPath();
+      ctx.fillStyle = p.color;
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+      p.y += 3;
+      if (p.y > canvas.height) p.y = -10;
+    });
+    requestAnimationFrame(drawConfetti);
+  }
+</script></body>
+</html>
